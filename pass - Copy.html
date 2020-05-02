@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>MaxiBiz Bootstrap Business Template</title>
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<meta content="" name="keywords">
+<meta content="" name="description">
+
+<!-- Favicons -->
+<link href="img/favicon.png" rel="icon">
+<link href="img/apple-touch-icon.png" rel="apple-touch-icon">
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css?family=Ruda:400,900,700" rel="stylesheet">
+
+<!-- Bootstrap CSS File -->
+<link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Libraries CSS Files -->
+<link href="lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+<link href="lib/prettyphoto/css/prettyphoto.css" rel="stylesheet">
+<link href="lib/hover/hoverex-all.css" rel="stylesheet">
+<link href="lib/jetmenu/jetmenu.css" rel="stylesheet">
+<link href="lib/owl-carousel/owl-carousel.css" rel="stylesheet">
+
+<!-- Main Stylesheet File -->
+<link href="css/style.css" rel="stylesheet">
+<link rel="stylesheet" href="css/colors/blue.css"><br>
+<link rel="stylesheet" href="carousel.css">
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js" type="text/javascript" ></script>
+
+<script src="slick.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/p5.min.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- =======================================================
+    Template Name: MaxiBiz
+    Template URL: https://templatemag.com/maxibiz-bootstrap-business-template/
+    Author: TemplateMag.com
+    License: https://templatemag.com/license/
+  ======================================================= -->
+</head>
+
+<body>
+ 
+<script>
+	let rocket = new Rocket(window.innerWidth/2, window.innerHeight/2),
+    sky = new starSky(),
+    fire = [];
+
+function preload() {
+  img = loadImage("https://image.flaticon.com/icons/png/512/123/123369.png");
+}
+
+function setup() {
+  	createCanvas(windowWidth, windowHeight);
+  	background(0);
+		setRocketAngle(rocket);
+    let d = Math.sqrt(Math.pow(mouseX - rocket.x-64, 2) + Math.pow(mouseY - rocket.y-64, 2));
+    rocket.setV(d/50);
+  	sky.init(30);
+}
+
+function draw() {
+  	rocket.move();
+  	sky.move(rocket.vX, rocket.vY);
+  
+  	noStroke();
+  	clear();
+		fill('#000000');
+		rect(0, 0, windowWidth, windowHeight);
+  	fill('#FFFFFF');
+  	for(let i = 0; i < sky.stars.length; i++) {
+     	ellipse(sky.stars[i].x, sky.stars[i].y, sky.stars[i].r); 
+    }
+  
+  	translate(rocket.x, rocket.y);
+  	fill("#17b9d6");
+  	rotate(rocket.angle);
+  	triangle(-45, -12, -48-20*rocket.v/2, 0, -45, 12);
+  
+  	fill("#FF5722");
+    rotate(PI/2);
+  	image(img, -64, -64, 128, 128);
+}
+
+function mouseMoved() {
+  setRocketAngle(rocket);
+  let d = Math.sqrt(Math.pow(mouseX - rocket.x-64, 2) + Math.pow(mouseY - rocket.y-64, 2));
+  rocket.setV(d/50);
+}
+
+function setRocketAngle(r) {
+	let dX = mouseX - r.x,
+      	dY = mouseY - r.y,
+      	angle = Math.atan(dY/dX);
+  
+  	angle = dX < 0 ? angle + PI : angle;
+	rocket.rotate(angle);
+}
+
+function Rocket(x = 100, y = 100) {
+	this.x = x;
+  	this.y = y;
+  	this.vX;
+  	this.vY;
+  	this.v = 0;
+  	this.angle = 0;
+}
+
+Rocket.prototype.move = function() {
+	// this.x += this.vX;
+	// this.y += this.vY;
+  	
+  this.vX = this.v * Math.cos(this.angle);
+	this.vY = this.v * Math.sin(this.angle);
+}
+
+Rocket.prototype.rotate = function(angle) {
+	this.angle = angle;
+}
+
+Rocket.prototype.setV = function(v) {
+  this.v = v;
+	this.vX = this.v * Math.cos(this.angle);
+	this.vY = this.v * Math.sin(this.angle); 
+}
+
+Rocket.prototype.getV = function() {
+	return this.v;
+}
+
+function starSky() {
+	this.stars = []; 
+}
+
+starSky.prototype.init = function(n) {
+	for(let i = 0; i < n; i++) {
+     	 this.stars.push({
+			x: random(0, window.innerWidth),
+			y: random(0, window.innerHeight),
+			r: random(4, 9)
+         });
+    }
+}
+
+starSky.prototype.move = function(vX, vY) {
+	 for(let i = 0; i < this.stars.length; i++) {
+		this.stars[i].x += (-vX/9)*this.stars[i].r;
+		this.stars[i].y += (-vY/9)*this.stars[i].r;
+       
+       	if(this.stars[i].x < 0)
+          this.stars[i].x = window.innerWidth;
+       	if(this.stars[i].x > window.innerWidth)
+          this.stars[i].x = 0;
+       	if(this.stars[i].y < 0)
+          this.stars[i].y = window.innerHeight;
+       	if(this.stars[i].y > window.innerHeight)
+          this.stars[i].y = 0;
+     }
+}
+                        
+function random(min, max) {
+ 	return Math.floor(Math.random() * (max - min) + min); 
+}</script>
+</body>
+</html>
